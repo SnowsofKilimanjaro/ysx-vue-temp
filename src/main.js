@@ -5,6 +5,9 @@ import Cookies from 'js-cookie'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 
 import Element from 'element-ui'
+import Vant from 'vant'
+import 'vant/lib/index.css'
+
 import './styles/element-variables.scss'
 
 import '@/styles/index.scss' // global css
@@ -16,7 +19,6 @@ import router from './router'
 import './permission' // permission control
 
 import * as filters from './filters' // global filters
-
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -33,6 +35,8 @@ import * as filters from './filters' // global filters
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
 })
+
+Vue.use(Vant)
 
 // register global utility filters
 Object.keys(filters).forEach(key => {

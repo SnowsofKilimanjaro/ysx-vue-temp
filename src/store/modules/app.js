@@ -130,7 +130,6 @@ const actions = {
           }
         }
         let result = convertToTree(data, { id: 'id', pid: 'pid' })
-        console.log(result)
         commit('setSiderbarMenuData', result)
       }
     })

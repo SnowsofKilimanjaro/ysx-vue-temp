@@ -1,14 +1,20 @@
 <section>
   <div class="app-container">
     <div class="head-container">
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-input
-          v-model="form.name"
-          placeholder="请输入名称"
-          @keyup.enter.native="onSubmit"
-          style="width: 200px;"
-          size="small"
-        />
+      <el-form ref="form" :model="form" :inline="true" label-width="80px">
+        <el-form-item label="类目状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择类目状态">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              style="width: 200px;"
+              size="small"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-button
           type="primary"
           class="search-btn"
@@ -16,45 +22,87 @@
           @click="onSubmit"
           >查询</el-button
         >
-        <el-button size="small" @click="onClear">清空</el-button>
+        <el-button size="small" @click="resetForm('form')">清空</el-button>
       </el-form>
-      <el-button size="small" type="primary" @click="add" class="add"
-        >新建类目</el-button
-      >
+      <div v-if="device !=='mobile'">
+        <el-button size="small" type="primary" @click="add" class="add"
+          >新建类目</el-button
+        >
+      </div>
     </div>
-    <el-table :data="tableData" style="width: 100%" size="small">
-      <el-table-column prop="date" label="日期" width="180"> </el-table-column>
-      <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
-      <el-table-column prop="address" label="地址"> </el-table-column>
-      <el-table-column prop="iphone" label="电话"> </el-table-column>
-      <el-table-column prop="email" label="邮箱"> </el-table-column>
-      <el-table-column fixed="right" label="操作" width="160">
-        <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
-            type="text"
-            size="small"
-          >
-            编辑
-          </el-button>
-          <el-button
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
-            type="text"
-            size="small"
-          >
-            立即上架
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination
-      class="pagination-container"
-      size="mini"
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
+    <div v-if="device !=='mobile' ">
+      <el-table :data="tableData" style="width: 100%" size="small">
+        <el-table-column prop="id" label="类目ID" width="120">
+        </el-table-column>
+        <el-table-column prop="name" label="类目名称"> </el-table-column>
+        <el-table-column prop="spe" label="类目下属规格"> </el-table-column>
+        <el-table-column prop="date" label="创建时间"> </el-table-column>
+        <el-table-column prop="status" label="类目状态"> </el-table-column>
+        <el-table-column fixed="right" label="操作" width="120">
+          <template slot-scope="scope">
+            <el-button
+              @click.native.prevent="deleteRow(scope.$index, tableData)"
+              type="text"
+              size="small"
+            >
+              编辑
+            </el-button>
+            <el-button
+              @click.native.prevent="immediatelyOn(scope.row)"
+              type="text"
+              size="small"
+            >
+              立即上架
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination
+        class="pagination-container"
+        size="mini"
+        v-show="total>0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.limit"
+        @pagination="getList"
+      />
+    </div>
+
+    <div v-else>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <van-cell-group v-for="(item, index) in tableData" :key="index">
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="类目ID："
+            :value="item.id"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="类目名称："
+            :value="item.name"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="类目下属规格："
+            :value="item.spe"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="创建时间："
+            :value="item.date"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="类目状态："
+            :value="item.status"
+          />
+        </van-cell-group>
+      </van-list>
+    </div>
   </div>
 </section>

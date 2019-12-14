@@ -1,11 +1,5 @@
 <template>
-  <div class="navbar">
-    <!-- <hamburger
-      id="hamburger-container"
-      :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar"
-    />-->
+  <div class="navbar desktop" v-if="device !== 'mobile'">
     <div class="header-menu-container">
       <a
         v-for="item in headerMenuData"
@@ -16,17 +10,31 @@
         >{{ item.name }}</a
       >
     </div>
+    <!-- <div class="header-menu-container" @click="toggleSideBar" v-else>
+      <div class="sidebar-menu-icon-mobile"></div>
+      <a
+        :key="currentMenu.id"
+        class="menu-item-mobile"
+        :href="currentMenu.url"
+        v-if="currentMenu"
+        >{{ currentMenu.name }}</a
+      >
+    </div> -->
     <div class="right-menu">
       <div class="line">|</div>
       <div class="current-env">当前登录环境:{{ env }}</div>
       <div class="line">|</div>
       <el-dropdown
-        class="avatar-container right-menu-item hover-effect"
+        class="
+          avatar-container
+          right-menu-item
+          hover-effect
+        "
         trigger="click"
       >
         <div class="avatar-wrapper">
-          欢迎:{{ userName }}
-          <!-- <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" /> -->
+          <div>欢迎:</div>
+          <div>{{ userName }}</div>
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
@@ -35,6 +43,20 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+  </div>
+  <div v-else class="navbar mobile">
+    <div class="sidebar-menu-icon-mobile" @click="toggleSideBar"></div>
+    <div :key="currentMenu.id" class="menu-item-mobile" v-if="currentMenu">
+      {{ currentMenu.name }}
+    </div>
+    <el-dropdown class="drop-down-mobile" trigger="click">
+      <div class="avatar-wrapper-mobile">{{ userName }}</div>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item>
+          <span style="display:block;" @click="logout">退出</span>
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </div>
 </template>
 
@@ -53,10 +75,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['sidebar', 'avatar', 'headerMenuData']),
+    ...mapGetters(['device', 'sidebar', 'avatar', 'headerMenuData']),
     userName() {
       let userInfo = getCookie('user_info')
       return JSON.parse(userInfo).username
+    },
+    currentMenu() {
+      let current = null
+      for (let index = 0; index < this.headerMenuData.length; index++) {
+        const element = this.headerMenuData[index]
+        if (element.appId === this.appId) {
+          current = element
+        }
+      }
+      return current
     },
     env() {
       let envFlag = getCookie('env_flag')
@@ -82,97 +114,129 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  display: flex;
   height: 54px;
   overflow: hidden;
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background 0.3s;
-    -webkit-tap-highlight-color: transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.025);
-    }
-  }
-  .header-menu-container {
-    flex-grow: 1;
+  &.desktop {
     display: flex;
-    line-height: 54px;
-    font-size: 14px;
+    align-items: center;
 
-    .menu-item {
-      margin: 0 10px;
-      color: #8091a5;
+    .header-menu-container {
+      flex-grow: 1;
+      display: flex;
+      line-height: 54px;
+      font-size: 14px;
+      align-items: center;
 
-      &.active {
-        color: #3582fb;
+      .menu-item {
+        margin: 0 10px;
+        color: #8091a5;
+
+        &.active {
+          color: #3582fb;
+        }
       }
     }
-  }
 
-  .right-menu {
-    float: right;
-    height: 100%;
-    line-height: 54px;
-    display: flex;
-    &:focus {
-      outline: none;
-    }
-
-    .line {
-      color: lightgray;
-    }
-
-    .current-env {
-      color: #303133;
-      padding: 0 23px;
-      font-size: 14px;
-    }
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
+    .right-menu {
+      float: right;
       height: 100%;
-      font-size: 14px;
-      color: #303133;
-      vertical-align: text-bottom;
+      line-height: 54px;
+      display: flex;
+      &:focus {
+        outline: none;
+      }
 
-      &.hover-effect {
-        cursor: pointer;
-        transition: background 0.3s;
+      .line {
+        color: lightgray;
+      }
 
-        &:hover {
-          background: rgba(0, 0, 0, 0.025);
+      .current-env {
+        color: #303133;
+        padding: 0 23px;
+        font-size: 14px;
+      }
+      .right-menu-item {
+        display: inline-block;
+        padding: 0 8px;
+        height: 100%;
+        font-size: 14px;
+        color: #303133;
+        vertical-align: text-bottom;
+
+        &.hover-effect {
+          cursor: pointer;
+          transition: background 0.3s;
+
+          &:hover {
+            background: rgba(0, 0, 0, 0.025);
+          }
+        }
+      }
+
+      .avatar-container {
+        margin-right: 12px;
+        margin-left: 15px;
+
+        &.mobile {
+          margin-right: 0;
+          margin-left: 0;
+        }
+        .avatar-wrapper {
+          position: relative;
+          display: flex;
+
+          .user-avatar {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+          }
+
+          .el-icon-caret-bottom {
+            cursor: pointer;
+            position: absolute;
+            right: -20px;
+            top: 25px;
+            font-size: 12px;
+          }
         }
       }
     }
+  }
+  &.mobile {
+    padding: 10px;
 
-    .avatar-container {
-      margin-right: 38px;
-      margin-left: 15px;
-      .avatar-wrapper {
-        position: relative;
+    .sidebar-menu-icon-mobile {
+      background: url(./Sidebar/icons/icon_expend.png) no-repeat;
+      height: 25px;
+      width: 25px;
+      background-size: 100%;
+      cursor: pointer;
+      position: absolute;
+      margin-left: 10px;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
+    .menu-item-mobile {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
+    .drop-down-mobile {
+      float: right;
+      margin-top: 9px;
+
+      .avatar-wrapper-mobile {
+        width: 70px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

@@ -1,5 +1,5 @@
 <section>
-  <div class="app-container">
+  <div class="app-container commodity">
     <div class="head-container">
       <el-form ref="form" :inline="true" :model="listQuery" label-width="80px">
         <el-form-item label="商品名称">
@@ -12,49 +12,164 @@
         </el-form-item>
         <el-form-item label="商品状态">
           <el-select v-model="listQuery.status" placeholder="请选择商品状态">
-            <el-option label="未上架" value="false"></el-option>
-            <el-option label="已上架" value="true"></el-option>
+            <el-option label="未上架" value="0"></el-option>
+            <el-option label="已上架" value="1"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-button type="primary" class="search-btn" size="small"
+        <el-button
+          type="primary"
+          class="search-btn"
+          size="small"
+          @click="handleSearch"
           >查询</el-button
         >
-        <el-button size="small">清空</el-button>
+        <el-button size="small" @click="resetListQuery">清空</el-button>
       </el-form>
-      <el-button size="small" type="primary" class="add">新建商品</el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%" size="small">
-      <el-table-column prop="id" label="商品ID"> </el-table-column>
-      <el-table-column prop="name" label="商品名称"> </el-table-column>
-      <el-table-column prop="category" label="所属类目"> </el-table-column>
-      <el-table-column prop="createTime" label="创建时间"> </el-table-column>
-      <el-table-column prop="status" label="商品状态"> </el-table-column>
-      <el-table-column fixed="right" label="操作" width="220">
-        <template slot-scope="scope">
-          <el-button type="text" size="small">
-            预览
-          </el-button>
-          <el-button type="text" size="small">
-            编辑
-          </el-button>
-          <el-button type="text" size="small">
-            sku管理
-          </el-button>
-          <el-button type="text" size="small">
-            立即上架
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination
-      class="pagination-container"
-      size="mini"
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
+    <div v-if="device!=='mobile'">
+      <div class="add">
+        <el-button
+          size="small"
+          type="primary"
+          v-if="device!=='mobile'"
+          @click="handleAddCommodity"
+          >新建商品</el-button
+        >
+      </div>
+      <el-table :data="tableData" style="width: 100%" size="small">
+        <el-table-column prop="id" label="商品ID" width="80"> </el-table-column>
+        <el-table-column prop="name" label="商品名称"> </el-table-column>
+        <el-table-column prop="category" label="所属类目"> </el-table-column>
+        <el-table-column prop="createTime" label="修改时间"> </el-table-column>
+        <el-table-column prop="shelvesTime" label="上架时间"> </el-table-column>
+        <el-table-column prop="takeOffTime" label="下架时间"> </el-table-column>
+
+        <el-table-column prop="status" label="商品状态">
+          <template slot-scope="scope">
+            {{getStatusName(scope.row.status)}}
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="250">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="previewQRcode(scope.row)"
+            >
+              预览
+            </el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="updateCommodity(scope.row.id)"
+            >
+              编辑
+            </el-button>
+            <el-button type="text" size="small">
+              sku管理
+            </el-button>
+            <el-button
+              type="text"
+              size="small"
+              @click="handleTakeOff(scope.row)"
+              v-if="scope.row.status === 1"
+            >
+              设定下架时间
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination
+        class="pagination-container"
+        size="mini"
+        v-show="total>0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.limit"
+        @pagination="handleSearch"
+      />
+      <el-dialog
+        custom-class="previewDialog"
+        v-if="currentCommidty"
+        title="手机扫码预览查看"
+        :visible.sync="previewVisible"
+        width="250px"
+        :modal="false"
+        center
+        destroy-on-close
+      >
+        <div class="QRcode-container">
+          <img :src="currentCommidty.url" />
+        </div>
+      </el-dialog>
+      <el-dialog
+        custom-class="takeOffDialog"
+        v-if="currentCommidty"
+        title="设定下架时间"
+        :visible.sync="takeOffVisible"
+        width="530"
+        center
+        destroy-on-close
+      >
+        <div class="time-container">
+          <div>下架时间：</div>
+          <div>
+            <el-date-picker
+              v-model="selectTakeOffTime"
+              type="datetime"
+              placeholder="选择日期时间"
+              :picker-options="pickerOptions"
+              @change="handleTakeOffChange"
+            >
+            </el-date-picker>
+          </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="takeOff">确 定</el-button>
+        </span>
+      </el-dialog>
+    </div>
+    <div v-else>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <van-cell-group v-for="(item, index) in tableData" :key="index">
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="商品ID："
+            :value="item.id"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="商品名称："
+            :value="item.name"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="所属类目："
+            :value="item.category"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="修改时间："
+            :value="item.createTime"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="上架时间:"
+            :value="item.shelvesTime"
+          />
+          <van-cell
+            :class="{'even':index % 2 === 0}"
+            title="下架时间:"
+            :value="item.takeOffTime"
+          />
+        </van-cell-group>
+      </van-list>
+    </div>
   </div>
 </section>

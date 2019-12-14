@@ -1,8 +1,9 @@
 <script>
 import cookies from 'js-cookie'
 import md5 from 'js-md5'
+import Swiper from 'swiper'
 import { decrypts } from '@/utils/index'
-import { domain } from '../../../config'
+import { domain, appId } from '../../../config'
 
 export default {
   data() {
@@ -49,6 +50,15 @@ export default {
     }
   },
   mounted() {
+    new Swiper('.swiper-container', {
+      // eslint-disable-line
+      autoplay: true,
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true
+      }
+    })
     this.authCode()
   },
   methods: {
@@ -65,7 +75,7 @@ export default {
         let ua = navigator.userAgent.toLowerCase()
         this.isBlur &&
           ua.match(/MicroMessenger/i) == 'micromessenger' &&
-          window.scrollTo(0, document.documentElement.clientHeight) // eslint-disable-line
+          window.scrollTo(0, document.documentElement.clientHeight); // eslint-disable-line
       }, 200)
     },
 
@@ -96,18 +106,15 @@ export default {
         })
       } else {
         cookies.get('LOGININFO') &&
-          cookies.remove('LOGININFO', { path: '', domain }) // eslint-disable-line
+          cookies.remove("LOGININFO", { path: "", domain }); // eslint-disable-line
       }
       // }
     },
     async handleLogin() {
-      this.setCookies()
-
       let params = {
         ...this.formLogin,
         ...this.formCodeLogin
       }
-      // eslint-disable-line
       if (!params.account) {
         this.$message({
           message: '用户名不能为空~',
@@ -135,13 +142,13 @@ export default {
         password: md5(params.accountPasswork),
         verifyCode: params.logCode,
         tokenId: this.tokenId,
-        sso_app_id: 'scrm-dashboard' // eslint-disable-line
+        sso_app_id: appId
       }
       this.$store
         .dispatch('app/login', { ...v })
         .then(response => {
-          console.log(process.env.VUE_APP_BASE_SSO, 'response')
           if (response && response.code == '0') {
+            this.setCookies()
             let resData = response.data
             cookies.set('sso_sessionid', resData.sessionId, {
               expires: 7,
@@ -156,11 +163,8 @@ export default {
             this.loading = false
             this.$router.push('/')
           } else {
+            this.authCode()
             this.loading = false
-            this.$message({
-              message: response.msg,
-              type: 'warning'
-            })
             this.getData()
             this.formLogin = {
               ...this.formLogin,

@@ -1,5 +1,6 @@
 <script>
 import Pagination from '@/components/Pagination'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ShopManage',
@@ -7,114 +8,313 @@ export default {
     return {
       tableData: [
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '0',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '已上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '1',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '2',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '3',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '4',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '5',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '6',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         },
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          iphone: 18610747777,
-          email: '1817893777@qq.com'
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '7',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '8',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
+        },
+        {
+          id: '9',
+          name: '直播课>大语文系统直播课',
+          spe: '年级、周、上课时间',
+          date: '2019-03-18 11:23:43',
+          status: '未上架'
         }
       ],
       form: {
-        name: ''
+        status: ''
       },
       list: null,
-      total: 10,
+      total: 30,
       listQuery: {
         page: 1,
         limit: 20
-      }
+      },
+      options: [
+        {
+          value: 0,
+          label: '未上架'
+        },
+        {
+          value: 1,
+          label: '已上架'
+        }
+      ],
+      mobileList: [],
+      loading: false,
+      finished: false
     }
+  },
+  computed: {
+    ...mapState({
+      device: state => state.app.device
+    })
   },
   components: {
     Pagination
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getList()
+  },
   methods: {
     getList() {
-      console.log(this.form, 'form')
       this.loading = true
-      // this.$store
-      //   .dispatch('', {
-      //     ...this.listQuery,
-      //     ...this.form
-      //   })
-      //   .then(res => {
-      //     console.log(res, 'res')
-      //   })
+      this.$store
+        .dispatch('ShopManage/category/getList', {
+          ...this.listQuery,
+          ...this.form
+        })
+        .then(res => {
+          this.loading = false
+          console.log(res, 'res')
+        })
     },
     onSubmit() {
       this.getList()
     },
-    onClear(formName) {
-      this.form = {
-        name: ''
-      }
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     },
-    add() {}
+    add() {},
+    immediatelyOn(row) {
+      this.$store
+        .dispatch('ShopManage/category/immediatelyOn', {
+          id: row.id
+        })
+        .then(res => {
+          this.loading = false
+          this.$message({
+            message: '已上架',
+            type: 'success'
+          })
+          this.getList()
+        })
+    },
+    onLoad() {
+      setTimeout(() => {
+        for (let i = 0; i < 5; i++) {
+          this.tableData.push({
+            id: '1',
+            name: '直播课>大语文系统直播课',
+            spe: '年级、周、上课时间',
+            date: '2019-03-18 11:23:43',
+            status: '未上架'
+          })
+        }
+        // 加载状态结束
+        this.loading = false
+
+        // 数据全部加载完成
+        if (this.list.length >= 40) {
+          this.finished = true
+        }
+      }, 5000)
+    }
   }
 }
 </script>

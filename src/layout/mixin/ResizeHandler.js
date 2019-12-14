@@ -28,8 +28,22 @@ export default {
     // use $_ for mixins properties
     // https://vuejs.org/v2/style-guide/index.html#Private-property-names-essential
     $_isMobile() {
-      const rect = body.getBoundingClientRect()
-      return rect.width - 1 < WIDTH
+      // let env = new RegExp('/Android|webOS|iPhone|iPod|BlackBerry/i').test(
+      //   navigator.userAgent
+      // )
+      // return env
+      if (
+        /AppleWebKit.*Mobile/i.test(navigator.userAgent) ||
+        /Android/i.test(navigator.userAgent) ||
+        /BlackBerry/i.test(navigator.userAgent) ||
+        /IEMobile/i.test(navigator.userAgent) ||
+        /MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(
+          navigator.userAgent
+        )
+      ) {
+        return true
+      }
+      return false
     },
     $_resizeHandler() {
       if (!document.hidden) {

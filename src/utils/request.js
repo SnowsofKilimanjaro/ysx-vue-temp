@@ -29,7 +29,14 @@ service.interceptors.response.use(
       resetCookies()
       return Router.push('/login')
     }
-    if (res.code === -1 || res.code === 500) {
+    if (res.code === -1) {
+      Message({
+        message: res.msg,
+        type: 'error'
+      })
+      return res
+    }
+    if (res.code === 500) {
       Message({
         message: res.msg,
         type: 'error'

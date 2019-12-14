@@ -1,0 +1,22 @@
+.commodity {
+  .add {
+    text-align: right;
+  }
+}
+.even {
+  background-color: #eee;
+}
+.previewDialog {
+  .QRcode-container {
+    text-align: center;
+  }
+}
+.takeOffDialog {
+  .time-container {
+    display: flex;
+    align-items: center;
+  }
+  .el-dialog__footer {
+    text-align: right;
+  }
+}

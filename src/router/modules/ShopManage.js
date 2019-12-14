@@ -5,7 +5,7 @@ import Layout from '@/layout'
 const shopManageRouter = {
   path: '/manage',
   component: Layout,
-  redirect: 'category',
+  redirect: '/manage/category',
   alwaysShow: true, // will always show the root menu
   name: '商城管理平台',
   children: [
@@ -18,6 +18,24 @@ const shopManageRouter = {
       path: 'commodity',
       component: () => import('@/views/CommodityManage/index'),
       name: '商品管理'
+    },
+    {
+      path: 'commodity/add',
+      component: () =>
+        import('@/views/CommodityManage/AddOrUpdateCommodity/index'),
+      name: '添加商品',
+      meta: {
+        activeMenu: '/manage/commodity'
+      }
+    },
+    {
+      path: 'commodity/update',
+      component: () =>
+        import('@/views/CommodityManage/AddOrUpdateCommodity/index'),
+      name: '编辑商品',
+      meta: {
+        activeMenu: '/manage/commodity'
+      }
     }
   ]
 }
